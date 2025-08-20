@@ -7,7 +7,7 @@ const JobNotes = (props) => {
     
     const fetch = async () => {
         try {
-            const response = await axios.get("https://role-match-backend.onrender.com/api/jobs/all", {
+            const response = await axios.get("https://role-match-backend.onrender.com/api/job/all", {
                 headers: {
                     "Content-Type": "application/json",
                 },
