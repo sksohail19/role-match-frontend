@@ -4,7 +4,15 @@ import axios from "axios";
 
 function ViewDetails() {
     const { id } = useParams();
+    const [description, setDescription] = useState("");
     const [job, setJob] = useState([]);
+
+    const stripHtmlTags = (str) => {
+        console.log("Strip HTML Tags is running")
+        if (!str) return "";
+        return str.replace(/<[^>]*>/g, "").trim();
+    };
+
 
     const fetchData = async () => {
         try {
@@ -15,7 +23,16 @@ function ViewDetails() {
             })
             console.log(response);
             if (response.status === 200) {
-                setJob(response.data);
+                const jobData = response.data;
+
+                // Clean description safely
+                const cleanedJob = {
+                    ...jobData,
+                    Description: stripHtmlTags(jobData.Description || jobData.description || "")
+                };
+
+                setJob(cleanedJob);
+                console.log("Cleaned Job:", cleanedJob);
             } else {
                 console.error("Failed to fetch jobs");
             }
@@ -35,7 +52,7 @@ function ViewDetails() {
                     <div className="d-flex justify-content-between align-items-start mb-3">
                         <h3 className="fw-bold">{job.Title}</h3>
                         <span className="badge bg-light text-primary border">
-                            {job.Source}
+                            {job.source}
                         </span>
                     </div>
 

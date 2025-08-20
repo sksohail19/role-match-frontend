@@ -15,31 +15,38 @@ function Home() {
     const [visibleCount, setVisibleCount] = useState(20); // show first 20
     const [displayedJobs, setDisplayedJobs] = useState([]);
 
+    // Remove HTML Tags
+    function stripHtmlTags(str) {
+        if (!str) return "";
+        return str.replace(/<[^>]*>/g, "").trim();
+    }
+
+
     // Filter jobs
     const filteredJobs = Array.isArray(job)
         ? job.filter((jobItem) => {
-              const companyMatch = company
-                  ? jobItem.CompanyName?.toLowerCase().includes(company.toLowerCase())
-                  : true;
+            const companyMatch = company
+                ? jobItem.CompanyName?.toLowerCase().includes(company.toLowerCase())
+                : true;
 
-              const locationMatch = location
-                  ? jobItem.Location?.toLowerCase().includes(location.toLowerCase())
-                  : true;
+            const locationMatch = location
+                ? jobItem.Location?.toLowerCase().includes(location.toLowerCase())
+                : true;
 
-              const keywordMatch = keywords
-                  ? (
-                        jobItem.Title?.toLowerCase() +
-                        " " +
-                        jobItem.Description?.toLowerCase()
-                    ).includes(keywords.toLowerCase())
-                  : true;
+            const keywordMatch = keywords
+                ? (
+                    jobItem.Title?.toLowerCase() +
+                    " " +
+                    jobItem.Description?.toLowerCase()
+                ).includes(keywords.toLowerCase())
+                : true;
 
-              const remoteMatch = remote
-                  ? jobItem.Location?.toLowerCase().includes("remote")
-                  : true;
+            const remoteMatch = remote
+                ? jobItem.Location?.toLowerCase().includes("remote")
+                : true;
 
-              return companyMatch && locationMatch && keywordMatch && remoteMatch;
-          })
+            return companyMatch && locationMatch && keywordMatch && remoteMatch;
+        })
         : [];
 
     // Update displayed jobs when filters change
@@ -187,8 +194,11 @@ function Home() {
 
                                         {/* Description */}
                                         <p className="card-text small">
-                                            {jobItem.Description}
+                                            <p className="card-text small">
+                                                {stripHtmlTags(jobItem.Description).slice(0, 150)}...
+                                            </p>
                                         </p>
+
 
                                         {/* Actions */}
                                         <div className="d-flex justify-content-between align-items-center">
